@@ -13,16 +13,15 @@ class PokerGameLogicTests: XCTestCase {
     let poker = PokerGame()
 
     func testPokerResult() {
-        print(poker)
         print(poker.gameMembers.getNamesInMembers())
         poker.drawCardsToAllMembers()
         print(poker)
         
         let cardCount = poker.dealer.gameType.cardCount
-        XCTAssertEqual(cardCount, poker.dealer.cards.count)
+        XCTAssertEqual(cardCount, poker.dealer.getCountOfCards())
         
         for member in poker.gameMembers.members {
-            XCTAssertEqual(cardCount, member.cards.count)
+            XCTAssertEqual(cardCount, member.getCountOfCards())
         }
     }
 }

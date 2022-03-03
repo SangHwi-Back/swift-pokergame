@@ -169,3 +169,17 @@ _failing tests 를 잘 알아보기 위해서도 위의 방법을 쓰는 것이 
 
 테스트 메소드 안에서 조건 선언을 통해 코드가 의도대로 동작하고 있는지 표현할 수 있습니다.   
 XCTAssert 류의 함수들을 이용하여 Boolean, nil, non-nil, expected values, throw error 등을 체크할 수 있습니다.
+
+---
+
+## Step4 Complement Task following Comments
+
+- [x] ```CardDeck.init()```에 팩토리 의존적인 코드를 제거하고 유연하게 만든다.
+- [x] ```Dealer``` 클래스에 열린 속성들을 확인해보고 닫을 수 있다면 닫는다.
+- [x] inout 파라미터를 사용하지 않도록 한다.
+- [x] ```Dealer.isFull(count:)``` 의 네이밍이 애매함.
+- [x] ```typealias CardShuffleAlgo = Dealer.CardAlgorithm``` 의 용도를 더 확실히 한다.
+- [x] ```GameMembers.getFavoriteShuffle()``` 의 코드가 읽기 어려워서 수정 필요.
+- [x] ```let participantCount: Int``` 도 타입으로 선언할 수 있을까?
+- [x] ```PokerParticipant.init()``` 의 랜덤값을 얻는 것은 상위에서 할 필요가 있음. 하위에 어떤 값이 반영되었는지 알 수 없기 때문이다.
+- [x] ```PokerParticipant``` 클래스에도 내부 프로퍼티도 private 선언할 수 있을지 확인한다.

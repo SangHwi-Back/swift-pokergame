@@ -9,33 +9,51 @@ import Foundation
 
 class PokerParticipant {
     
-    let name: String
-    var favoriteShuffle: CardShuffleAlgo
-    var cards = [Card]()
+    private let name: String
+    private(set) var favoriteAlgorithm: PokerCardAlgorithm
+    private var cards = [Card]()
+    private(set) var typeOfGame: TypeOfGame
     
-    init() {
-        name = String.randomString(length: (2...5).randomElement()!)
-        favoriteShuffle = CardShuffleAlgo.allCases.randomElement()!
+    init(of type: TypeOfGame, as name: String) {
+        self.typeOfGame = type
+        self.name = name
+        favoriteAlgorithm = PokerCardAlgorithm.getRandomAlgorithm()
     }
     
-    func makeMyMindAgain(as algorithm: CardShuffleAlgo? = nil) {
+    func makeMyMindAgain(algorithm: PokerCardAlgorithm? = nil) {
         
         if let algorithm = algorithm {
-            self.favoriteShuffle = algorithm
+            self.favoriteAlgorithm = algorithm
             return
         }
         
-        favoriteShuffle = CardShuffleAlgo.allCases.randomElement()!
+        favoriteAlgorithm = PokerCardAlgorithm.getRandomAlgorithm()
     }
     
-    func isFull(count: Int) -> Bool {
-        cards.count <= count
+    func hasEnoughCards() -> Bool {
+        cards.count >= typeOfGame.cardCount
+    }
+
+    func addOne(_ card: Card) {
+        cards.append(card)
+    }
+    
+    func getCountOfCards() -> Int {
+        cards.count
+    }
+    
+    func getName() -> String {
+        name
     }
 }
 
 extension String {
-    static func randomString(length: Int) -> String {
-      let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      return String((0..<length).map{ _ in letters.randomElement()! })
+    
+    static var uppercaseAlphabet = (65...90).map {String(UnicodeScalar($0))}
+    static var lowercaseAlphabet = (97...122).map {String(UnicodeScalar($0))}
+    static var allAlphabet = (uppercaseAlphabet + lowercaseAlphabet)
+    
+    static func randomAlphabet(length: Int) -> String {
+        return allAlphabet.randomElement() ?? ""
     }
 }

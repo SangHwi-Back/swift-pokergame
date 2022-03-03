@@ -11,13 +11,8 @@ struct CardDeck {
     
     private var deck: [Card]
     
-    init(_ type: CardFactory.Init) {
-        switch type {
-        case .random:
-            deck = [CardFactory.randomCard()]
-        case .deck:
-            deck = CardFactory.deckOfCard()
-        }
+    init(deck: [Card]) {
+        self.deck = deck
     }
     
     func count() -> Int {

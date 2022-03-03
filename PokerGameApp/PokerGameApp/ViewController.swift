@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     private let poker = PokerGame()
     private var dealerDeck: CardDeck { poker.dealer.deck }
     private var dealerSkill: ShuffleAlgorithm<Card> { poker.dealer.shuffleSkill }
-    private var selectedAlgorithm: ((inout [Card]) -> Void)!
+    private var selectedAlgorithm: (([Card]) -> [Card])!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,12 +74,9 @@ class ViewController: UIViewController {
     
     @IBAction func algorithmControlValueChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
-        case 0: selectedAlgorithm =
-            dealerSkill.fisherYatesAlgorithm
-        case 1: selectedAlgorithm =
-            dealerSkill.knuthAlgorithm
-        default: selectedAlgorithm =
-            dealerSkill.ordinaryCardShuffle
+        case 0: selectedAlgorithm = dealerSkill.fisherYatesAlgorithm
+        case 1: selectedAlgorithm = dealerSkill.knuthAlgorithm
+        default: selectedAlgorithm = dealerSkill.ordinaryCardShuffle
         }
     }
     
@@ -147,14 +144,14 @@ enum TypeOfGame {
     case FiveStudPoker
     case NotGameCard
     
-    var cardCount: Int? {
+    var cardCount: Int {
         switch self {
         case .SevenStudPoker:
             return 7
         case .FiveStudPoker:
             return 5
         default:
-            return nil
+            return 0
         }
     }
 }

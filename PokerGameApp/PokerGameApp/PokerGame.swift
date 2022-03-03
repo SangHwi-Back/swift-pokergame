@@ -12,37 +12,33 @@ class PokerGame {
     let gameMembers: GameMembers
     let dealer: Dealer
     
-    let participantCount = 3
+    let participantCount = NumberOfPerson.three
     let game = TypeOfGame.SevenStudPoker
     
     init() {
-        
         gameMembers = GameMembers(numberOf: participantCount, gameType: game)
-        
-        dealer = Dealer(deck: CardDeck(.deck), gameType: game)
+        dealer = Dealer(cards: CardFactory.deckOfCard(), gameType: game)
         dealer.shuffleType = gameMembers.getFavoriteShuffle()
     }
     
     func drawCardsToAllMembers() {
         
-        guard let cardCount = game.cardCount else { return }
+        let cardCount = game.cardCount
+        let participants = gameMembers.members
         
         while isGameReady(cardCount) {
             
-            for i in 0..<(1+participantCount) {
+            for i in 0..<participantCount.rawValue+1 { // Plus 1 for Dealer.
                 
                 guard let card = dealer.draw() else { break }
-                
-                if i == 0 {
-                    if dealer.isFull(count: cardCount) == false {
-                        dealer.setCard(card)
-                    }
-                    
+
+                if i == 0, dealer.hasEnoughCards() == false {
+                    dealer.addOne(card)
                     continue
                 }
                 
-                if gameMembers.members[i-1].isFull(count: cardCount) {
-                    gameMembers.members[i-1].cards.append(card)
+                if participants[i-1].hasEnoughCards() == false {
+                    participants[i-1].addOne(card)
                 }
             }
             
@@ -51,12 +47,19 @@ class PokerGame {
     }
     
     private func isGameReady(_ n: Int) -> Bool {
-        !gameMembers.isFull(count: n) && !dealer.isFull(count: n)
+        !gameMembers.hasEnoughCards() && !dealer.hasEnoughCards()
+    }
+    
+    enum NumberOfPerson: Int {
+        case one = 1
+        case two = 2
+        case three = 3
+        case four = 4
     }
 }
 
 extension PokerGame: CustomStringConvertible {
     var description: String {
-        "딜러\(dealer.cards)" + gameMembers.members.reduce("", {"\($0)\n\($1.name)\($1.cards)"})
+        "딜러\(dealer.cards)" + gameMembers.members.reduce("", {"\($0)\n\($1.getName())\($1.getCountOfCards())"})
     }
 }

@@ -11,8 +11,8 @@ typealias CardNumber = Card.Number
 typealias CardSymbol = Card.Symbol
 
 class Card {
-    private let number: CardNumber!
-    private let symbol: CardSymbol!
+    private let number: CardNumber
+    private let symbol: CardSymbol
 
     init(as number: CardNumber, using symbol: CardSymbol) {
         self.number = number

@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias CardShuffleAlgo = Dealer.CardAlgorithm
+typealias PokerCardAlgorithm = Dealer.CardAlgorithm
 
 class Dealer {
     
@@ -17,21 +17,16 @@ class Dealer {
     let gameType: TypeOfGame
     var cards = [Card]()
     
-    var shuffleType: CardShuffleAlgo = .FisherYates
-    var shuffleMethod: ((inout [Card]) -> Void) {
-        switch shuffleType {
-        case .FisherYates:
-            return shuffleSkill.fisherYatesAlgorithm
-        case .Knuth:
-            return shuffleSkill.knuthAlgorithm
-        case .Ordinary:
-            return shuffleSkill.ordinaryCardShuffle
-        }
-    }
+    var shuffleType: CardAlgorithm = .FisherYates
     
     init(deck: CardDeck, gameType type: TypeOfGame) {
         self.deck = deck
         self.gameType = type
+    }
+
+    init(cards: [Card], gameType type: TypeOfGame) {
+        deck = CardDeck(deck: cards)
+        gameType = type
     }
     
     func draw() -> Card? {
@@ -39,20 +34,36 @@ class Dealer {
     }
     
     func shuffle() {
-        shuffleMethod(&cards)
+        switch shuffleType {
+        case .FisherYates:
+            cards = shuffleSkill.fisherYatesAlgorithm(at: cards)
+        case .Knuth:
+            cards = shuffleSkill.knuthAlgorithm(at: cards)
+        case .Ordinary:
+            cards = shuffleSkill.ordinaryCardShuffle(at: cards)
+        }
     }
     
-    func isFull(count: Int) -> Bool {
-        cards.count >= count
+    func hasEnoughCards() -> Bool {
+        let count = gameType.cardCount
+        return cards.count >= count
     }
     
-    func setCard(_ card: Card) {
+    func addOne(_ card: Card) {
         cards.append(card)
+    }
+    
+    func getCountOfCards() -> Int {
+        cards.count
     }
     
     enum CardAlgorithm: String, CaseIterable {
         case FisherYates = "FisherYates"
         case Knuth = "Knuth"
         case Ordinary = "Ordinary"
+        
+        static func getRandomAlgorithm() -> CardAlgorithm {
+            self.allCases.randomElement() ?? .FisherYates
+        }
     }
 }

@@ -15,11 +15,13 @@ class PokerCardCountTestCase: XCTestCase {
     func testCountExamine() throws {
         poker.drawCardsToAllMembers()
         
-        let dealerOwns = poker.dealer.cards.count
-        let membersOwn = poker.gameMembers.members.reduce(0, {$0+$1.cards.count})
+        let dealerOwns = poker.dealer.getCountOfCards()
+        let membersOwn = poker.gameMembers.members.reduce(0, {$0+$1.getCountOfCards()})
         let remains = poker.dealer.deck.count()
         
-        XCTAssertEqual(52, dealerOwns + membersOwn + remains)
+        print(dealerOwns, membersOwn, remains)
+        
+        XCTAssertEqual(52, (dealerOwns + membersOwn + remains))
         
         while let _ = poker.dealer.draw() {
             continue
