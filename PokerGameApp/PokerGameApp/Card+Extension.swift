@@ -33,6 +33,19 @@ extension Card {
         static var randomElement: Symbol {
             allCases.randomElement()!
         }
+        
+        func toAlphabet() -> String {
+            switch self {
+            case .spade:
+                return "s"
+            case .clover:
+                return "c"
+            case .heart:
+                return "h"
+            case .diamond:
+                return "d"
+            }
+        }
     }
 }
 

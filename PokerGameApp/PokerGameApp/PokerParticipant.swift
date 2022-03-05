@@ -45,6 +45,10 @@ class PokerParticipant {
     func getName() -> String {
         name
     }
+    
+    func getCards() -> [Card] {
+        cards
+    }
 }
 
 extension String {

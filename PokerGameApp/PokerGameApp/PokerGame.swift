@@ -9,21 +9,22 @@ import Foundation
 
 class PokerGame {
     
-    let gameMembers: GameMembers
-    let dealer: Dealer
+    private let gameMembers: GameMembers
+    private let dealer: Dealer
     
-    let participantCount = NumberOfPerson.three
-    let game = TypeOfGame.SevenStudPoker
+    private(set) var participantCount = NumberOfPerson.three
+    private(set) var typeOfGame: TypeOfGame
     
-    init() {
-        gameMembers = GameMembers(numberOf: participantCount, gameType: game)
-        dealer = Dealer(cards: CardFactory.deckOfCard(), gameType: game)
+    init(of type: TypeOfGame) {
+        typeOfGame = type
+        gameMembers = GameMembers(numberOf: participantCount, gameType: typeOfGame)
+        dealer = Dealer(cards: CardFactory.deckOfCard(), gameType: typeOfGame)
         dealer.shuffleType = gameMembers.getFavoriteShuffle()
     }
     
     func drawCardsToAllMembers() {
         
-        let cardCount = game.cardCount
+        let cardCount = typeOfGame.cardCount
         let participants = gameMembers.members
         
         while isGameReady(cardCount) {
@@ -46,12 +47,35 @@ class PokerGame {
         }
     }
     
+    func shuffleAll() {
+        dealer.shuffle()
+    }
+    
+    func dealerCards() -> [Card] {
+        dealer.cards
+    }
+    
+    func setParticipantCount(_ count: NumberOfPerson) {
+        participantCount = count
+    }
+    
+    func setGameType(_ type: TypeOfGame) {
+        typeOfGame = type
+    }
+    
+    func getParticipant(at index: Int) -> PokerParticipant? {
+        guard gameMembers.members.count >= index+1 else {
+            return nil
+        }
+        
+        return gameMembers.members[index]
+    }
+    
     private func isGameReady(_ n: Int) -> Bool {
         !gameMembers.hasEnoughCards() && !dealer.hasEnoughCards()
     }
     
     enum NumberOfPerson: Int {
-        case one = 1
         case two = 2
         case three = 3
         case four = 4

@@ -18,6 +18,10 @@ class Card {
         self.number = number
         self.symbol = symbol
     }
+    
+    func getImageName() -> String {
+        "\(symbol.toAlphabet())\(number.encodedNum)"
+    }
 }
 
 extension Card: CustomStringConvertible {
